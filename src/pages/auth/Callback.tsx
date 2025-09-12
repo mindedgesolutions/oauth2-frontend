@@ -30,7 +30,7 @@ const Callback = () => {
         .then((res) => {
           if (res.status === 200) {
             localStorage.setItem('token', res.data.access_token);
-            localStorage.setItem('refresh_token', res.data.refresh_token);
+            // localStorage.setItem('refresh_token', res.data.refresh_token);
             localStorage.removeItem('pkce_verifier');
             navigate('/admin/users');
           } else {

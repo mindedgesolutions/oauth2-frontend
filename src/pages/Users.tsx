@@ -1,3 +1,4 @@
+import { BodyWrapper } from '@/components';
 import customFetch from '@/utils/customFetch';
 import { useEffect, useState } from 'react';
 
@@ -19,6 +20,6 @@ const Users = () => {
   }, []);
   console.log(data);
 
-  return <div>Users</div>;
+  return <BodyWrapper>Users</BodyWrapper>;
 };
 export default Users;

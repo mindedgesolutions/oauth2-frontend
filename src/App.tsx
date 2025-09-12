@@ -4,6 +4,7 @@ import { store } from './store';
 import { loader as layoutLoader } from '@/pages/Layout';
 import { loader as signinLoader } from '@/pages/auth/Signin';
 import { loader as callbackLoader } from '@/pages/auth/Callback';
+import { loader as chatLoader } from '@/pages/Chat';
 
 const router = createBrowserRouter([
   { path: '/', element: <Ch.Signin />, loader: signinLoader },
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
     children: [
       { path: 'users', element: <Ch.Users /> },
       { path: 'factories', element: <Ch.Factories /> },
+      { path: 'chat', element: <Ch.Chat />, loader: chatLoader(store) },
     ],
   },
 ]);

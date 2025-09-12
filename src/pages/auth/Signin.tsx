@@ -30,7 +30,6 @@ const Signin = () => {
     const verifier = generateCodeVerifier();
     localStorage.setItem('pkce_verifier', verifier);
     const code_challenge = await generateCodeChallenge(verifier);
-
     const client_id = import.meta.env.VITE_CLIENT_ID;
     const redirect_uri = 'http://localhost:5173/auth/callback';
     const scope = '*';
@@ -49,14 +48,6 @@ const Signin = () => {
       );
 
       if (response.status === 200) {
-        const verifier = generateCodeVerifier();
-        localStorage.setItem('pkce_verifier', verifier);
-        const code_challenge = await generateCodeChallenge(verifier);
-
-        const client_id = import.meta.env.VITE_CLIENT_ID;
-        const redirect_uri = 'http://localhost:5173/auth/callback';
-        const scope = '*';
-
         if (code_challenge) {
           const params = new URLSearchParams({
             client_id,
@@ -64,6 +55,8 @@ const Signin = () => {
             scope,
             code_challenge,
             code_challenge_method: 'S256',
+            username: data.username,
+            password: data.password,
           });
 
           window.location.href = `http://127.0.0.1:8000/oauth/login?${params.toString()}`;

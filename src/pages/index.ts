@@ -3,3 +3,4 @@ export { default as Users } from '@/pages/Users';
 export { default as Layout } from '@/pages/Layout';
 export { default as Callback } from '@/pages/auth/Callback';
 export { default as Factories } from '@/pages/Factories';
+export { default as Chat } from '@/pages/Chat';

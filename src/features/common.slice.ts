@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   currentUser: {} as UserProps | null,
+  chatUsers: [] as UserProps[],
 };
 
 const commonSlice = createSlice({
@@ -16,7 +17,11 @@ const commonSlice = createSlice({
       localStorage.removeItem('token');
       localStorage.removeItem('refresh_token');
     },
+    setChatUsers: (state, action) => {
+      state.chatUsers = action.payload;
+    },
   },
 });
-export const { setCurrentUser, unsetCurrentUser } = commonSlice.actions;
+export const { setCurrentUser, unsetCurrentUser, setChatUsers } =
+  commonSlice.actions;
 export default commonSlice.reducer;
