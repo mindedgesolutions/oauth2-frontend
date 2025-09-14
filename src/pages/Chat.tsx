@@ -9,18 +9,20 @@ import profileImg from '@/assets/images/profile.jpg';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import showError from '@/utils/showError';
 
 const Chat = () => {
-  const { chatUsers } = useAppSelector((store) => store.common);
+  const { currentUser, chatUsers } = useAppSelector((store) => store.common);
+  const authUserId = currentUser!.id;
   const [message, setMessage] = useState<any>('');
   const [receiver, setReceiver] = useState<UserProps | null>(null);
+  const msgRef = useRef<HTMLTextAreaElement>(null);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSubmit(e as any);
+      e.currentTarget.form?.requestSubmit();
     }
   };
 
@@ -29,7 +31,11 @@ const Chat = () => {
     if (message.trim() === '') return;
     const formData = new FormData(e.currentTarget);
     let data = Object.fromEntries(formData);
-    data = { ...data, receiver: String(receiver!.id) };
+    data = {
+      ...data,
+      sender_id: String(authUserId),
+      receiver_id: String(receiver!.id),
+    };
 
     try {
       const response = await customFetch.post(`/messages/send`, data, {
@@ -39,6 +45,7 @@ const Chat = () => {
       });
       if (response.status === 201 || response.status === 200) {
         setMessage('');
+        msgRef.current?.focus();
       }
     } catch (error) {
       Object.entries((error as any)?.response?.data?.errors).forEach(
@@ -89,7 +96,10 @@ const Chat = () => {
                   {receiver.name}
                 </p>
               </div>
-              <ChatMessages userId={receiver.id} />
+              <ChatMessages
+                authUserId={Number(authUserId)}
+                receiver={receiver.id}
+              />
             </div>
             <form onSubmit={handleSubmit}>
               <div className="relative">
@@ -100,6 +110,7 @@ const Chat = () => {
                   onKeyDown={handleKeyDown}
                   onChange={(e) => setMessage(e.target.value)}
                   value={message}
+                  ref={msgRef}
                 />
                 <div className="absolute top-0 right-0 h-full p-1.5">
                   <Button type="submit" className="h-full rounded-none">

@@ -12,11 +12,18 @@ window.Pusher = Pusher;
 
 const echo: Echo<'reverb'> = new Echo({
   broadcaster: 'reverb',
-  key: 'local-app-key',
-  wsHost: '127.0.0.1',
+  key: 'kmlebj92rtqsqqd62en4',
+  wsHost: window.location.hostname,
   wsPort: 6001,
   forceTLS: false,
   enabledTransports: ['ws'],
+  authEndpoint: 'http://localhost:8000/api/broadcasting/auth',
+  auth: {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+      Accept: 'application/json',
+    },
+  },
 });
 
 export default echo;
