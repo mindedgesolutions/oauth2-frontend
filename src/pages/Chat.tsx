@@ -49,7 +49,7 @@ const Chat = () => {
       }
     } catch (error) {
       Object.entries((error as any)?.response?.data?.errors).forEach(
-        ([key, value]) => {
+        ([__, value]) => {
           showError(value as string);
         }
       );
@@ -65,7 +65,11 @@ const Chat = () => {
               chatUsers.map((user) => (
                 <div
                   key={user.id}
-                  className="flex flex-row justify-between items-center gap-4 p-2 px-4 bg-muted rounded-sm my-0.5 group hover:bg-muted-foreground/15 cursor-pointer"
+                  className={`flex flex-row justify-between items-center gap-4 p-2 px-4 ${
+                    user.id === receiver?.id
+                      ? 'bg-sky-muted/80 hover:bg-none'
+                      : 'bg-muted hover:bg-muted-foreground/15'
+                  } rounded-sm my-0.5 group cursor-pointer`}
                   onClick={() => setReceiver(user)}
                 >
                   <div className="flex gap-3 items-center">
@@ -73,7 +77,13 @@ const Chat = () => {
                       <AvatarImage src={profileImg} alt={`user`} />
                       <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                     </Avatar>
-                    <p className="text-xs text-muted-foreground group-hover:text-card-foreground">
+                    <p
+                      className={`text-xs ${
+                        user.id === receiver?.id
+                          ? 'text-card-foreground font-medium'
+                          : 'text-muted-foreground font-normal'
+                      } group-hover:text-card-foreground`}
+                    >
                       {user.name}
                     </p>
                   </div>
@@ -96,16 +106,13 @@ const Chat = () => {
                   {receiver.name}
                 </p>
               </div>
-              <ChatMessages
-                authUserId={Number(authUserId)}
-                receiver={receiver.id}
-              />
+              <ChatMessages receiver={receiver.id} />
             </div>
             <form onSubmit={handleSubmit}>
-              <div className="relative">
+              <div className="relative h-[100px]">
                 <Textarea
                   name="message"
-                  className="rounded-none resize-none"
+                  className="h-[100px] rounded-none resize-none"
                   placeholder="Type here ..."
                   onKeyDown={handleKeyDown}
                   onChange={(e) => setMessage(e.target.value)}
@@ -121,7 +128,7 @@ const Chat = () => {
             </form>
           </div>
         )}
-        <div className="">Chat history</div>
+        <div className=""></div>
       </div>
     </BodyWrapper>
   );
